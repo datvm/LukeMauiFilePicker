@@ -7,7 +7,8 @@ public partial class MainPage : ContentPage
     static readonly Dictionary<DevicePlatform, IEnumerable<string>> FileType = new()
     {
         {  DevicePlatform.Android, new[] { "text/*" } } ,
-        { DevicePlatform.iOS, new[] { ".txt", ".json" } },
+        { DevicePlatform.iOS, new[] { "public.json", "public.plain-text" } },
+        { DevicePlatform.MacCatalyst, new[] { "public.json", "public.plain-text" } },
         { DevicePlatform.WinUI, new[] { ".txt", ".json" } }
     };
 
