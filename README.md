@@ -6,6 +6,8 @@ See [demo project](./LukeMauiFilePicker.Demo/) with sample text editor app: **Op
 
 This article uses Windows screenshots. To see screenshots for other platforms, see [Screenshots on all platforms](#screenshots-on-all-platforms)
 
+Was it helpful for you? Please consider a donation ❤️ [PayPal](https://paypal.me/datvm).
+
 # Installation & Setup
 
 ## Nuget Package
