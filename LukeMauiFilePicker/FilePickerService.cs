@@ -11,6 +11,8 @@ public interface IFilePickerService
 public partial class FilePickerService : IFilePickerService
 {
 
+    public static readonly FilePickerService Instance = new();
+
     public async Task<IPickFile?> PickFileAsync(string title, Dictionary<DevicePlatform, IEnumerable<string>>? types)
     {
         var files = await PickFilesAsync(title, types, false);
@@ -21,7 +23,7 @@ public partial class FilePickerService : IFilePickerService
 
     static async Task<IEnumerable<IPickFile>?> DefaultPickFilesAsync(string title, Dictionary<DevicePlatform, IEnumerable<string>>? types, bool multiple)
     {
-        // Use the MAUI default Picker for Android because it's still working well
+        // Use the MAUI default Picker for Android and Windows because it's still working well
 
         var options = new PickOptions()
         {

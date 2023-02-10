@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LukeMauiFilePicker", "LukeMauiFilePicker\LukeMauiFilePicker.csproj", "{F3B5CD0E-BB6C-43B6-A8E4-22625E4B7B89}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LukeMauiFilePicker.Demo", "LukeMauiFilePicker.Demo\LukeMauiFilePicker.Demo.csproj", "{E83AAC6F-32F2-40A5-B8CA-28E48BE422F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,12 @@ Global
 		{F3B5CD0E-BB6C-43B6-A8E4-22625E4B7B89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3B5CD0E-BB6C-43B6-A8E4-22625E4B7B89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3B5CD0E-BB6C-43B6-A8E4-22625E4B7B89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E83AAC6F-32F2-40A5-B8CA-28E48BE422F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E83AAC6F-32F2-40A5-B8CA-28E48BE422F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E83AAC6F-32F2-40A5-B8CA-28E48BE422F5}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{E83AAC6F-32F2-40A5-B8CA-28E48BE422F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E83AAC6F-32F2-40A5-B8CA-28E48BE422F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E83AAC6F-32F2-40A5-B8CA-28E48BE422F5}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LukeMauiFilePicker.Demo.MainPage">
+
+    <VerticalStackLayout>
+        <Button Text="Pick a Single File" Clicked="PickOne" Margin="10" />
+        <Button Text="Pick Multiple Files" Clicked="PickMany" Margin="10" />
+
+        <Editor x:Name="TextEditor" HeightRequest="200" Margin="10" />
+
+        <Button Text="Save" Clicked="Save" Margin="10" />
+    </VerticalStackLayout>
+
+</ContentPage>
