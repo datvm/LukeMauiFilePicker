@@ -1,4 +1,5 @@
-﻿using Windows.Storage.Pickers;
+﻿using Windows.Storage;
+using Windows.Storage.Pickers;
 
 namespace LukeMauiFilePicker;
 
@@ -19,10 +20,20 @@ partial class FilePickerService
         var file = await picker.PickSaveFileAsync();
         if (file is null) { return false; }
 
-        using var outStr = await file.OpenStreamForWriteAsync();
-        await options.Content.CopyToAsync(outStr);
+        return await WriteToFileAsync(file, options.Content);
+    }
 
-        return true;
+    static async Task<bool> WriteToFileAsync(IStorageFile file, Stream content)
+    {
+        CachedFileManager.DeferUpdates(file);
+
+        await using var stream = await file.OpenStreamForWriteAsync();
+        stream.SetLength(0);
+
+        await content.CopyToAsync(stream);
+
+        var status = await CachedFileManager.CompleteUpdatesAsync(file);
+        return status == Windows.Storage.Provider.FileUpdateStatus.Complete;
     }
 
     static FileSavePicker? CreatePicker()
