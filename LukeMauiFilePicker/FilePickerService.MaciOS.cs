@@ -60,18 +60,18 @@ partial class FilePickerService
             await options.Content.CopyToAsync(file);
         }
         var url = new NSUrl(path, false);
-        
+
         var picker = new UIDocumentPickerViewController(new[] { url });
         TaskCompletionSource<bool> filesTcs = new();
         picker.DidPickDocumentAtUrls += (_, e) =>
         {
             filesTcs.TrySetResult(e.Urls.Length > 0);
         };
-        
+
         var controller = Platform.GetCurrentUIViewController();
         ArgumentNullException.ThrowIfNull(controller);
         await controller.PresentViewControllerAsync(picker, true);
-        
+
         return await filesTcs.Task;
     }
 
@@ -84,10 +84,9 @@ partial class FilePickerService
             this.url = url;
         }
 
-        public string FileName
-            => Path.GetFileName(url.Path!);
+        public string FileName => url.Path is null ? "" : Path.GetFileName(url.Path);
 
-        public FileResult? FileResult => null;
+        public FileResult? FileResult => url.Path is null ? null : new(url.Path);
 
         public Task<Stream> OpenReadAsync()
             => Task.FromResult(new FileStream(url.Path!, FileMode.Open) as Stream);
