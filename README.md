@@ -13,7 +13,7 @@ Was it helpful for you? Please consider a donation ❤️ [PayPal](https://paypa
 ## v1.2.0
 
 - Fixed `SaveFileAsync` not returning when user cancels the save operation on iOS and Mac Catalyst.
-- Added `DeferredSaveFileOptions` to allow deferring the content creation until after the user picks a file. Only work for Windows and Android. See documentation for more details.
+- Added `DeferredSaveFileOptions` to allow deferring the content creation until after the user picks a file. Only work for Windows and Android while iOS and Mac Catalyst simply redirects to `SaveFileOptions`.
 
 # Installation & Setup
 
@@ -120,7 +120,7 @@ Save a file. The `SaveFileOptions` and `DeferredSaveFileOptions` contains the fo
 
 - `string SuggestedFileName` (**Required**): The suggested file name.
 - `Stream Content` for `SaveFileOptions` (**Required**): The content to write to. Note that this is required before user even pick a file because for iOS and Mac, it needs to be available before user picks a file.
-- `Func<Stream>` or `Func<Task<Stream>> Content` for `DeferredSaveFileOptions`: A function that returns a stream to write to. This is useful when you want to defer the content creation until after the user picks a file. The function is not called if user cancels the save operation. **Note:** on iOS and Mac Catalyst, this function simply redirects to `SaveFileOptions.Content` since the content needs to be available before user picks a file.
+- `Func<Stream>` or `Func<Task<Stream>> Content` for `DeferredSaveFileOptions` (**Required**): A function that returns a stream of content to be written. This is useful when you want to defer the content creation until after the user picks a file. The function is not called if user cancels the save operation. **Note:** on iOS and Mac Catalyst, this function simply redirects to `SaveFileOptions` since the content needs to be available before user picks a file.
 - `(string FileTypeName, List<string> FileTypeExts) WindowsFileTypes`: Windows-specific file types. The `FileTypeName` is the name of the file type (can be any descriptive text), and `FileTypeExts` is a list of file extensions. If you do not specify this, the default is `All Files (*.*)`.
 
 - `string AndroidMimeType`: Android-specific MIME type. If you do not specify this, the default is `application/octet-stream`.
