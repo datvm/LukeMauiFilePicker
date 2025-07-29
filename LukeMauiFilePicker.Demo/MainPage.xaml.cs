@@ -41,7 +41,11 @@ public partial class MainPage : ContentPage
     private async void PickOne(object sender, EventArgs e)
     {
         var file = await picker.PickFileAsync("Select a file", FileType);
-        if (file is null) { return; }
+        if (file is null)
+        {
+            await DisplayAlert("Cancelled", "No file was selected.", "OK");
+            return;
+        }
 
         await OnFilesPickedAsync(new[] { file });
     }
@@ -49,7 +53,11 @@ public partial class MainPage : ContentPage
     private async void PickMany(object sender, EventArgs e)
     {
         var files = await picker.PickFilesAsync("Select a file", FileType, true);
-        if (files is null || !files.Any()) { return; }
+        if (files is null || !files.Any())
+        {
+            await DisplayAlert("Cancelled", "No files were selected.", "OK");
+            return;
+        }
 
         await OnFilesPickedAsync(files);
     }

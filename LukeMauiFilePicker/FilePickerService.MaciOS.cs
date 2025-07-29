@@ -36,7 +36,13 @@ partial class FilePickerService
             AllowsMultipleSelection = multiple
         };
 
-        TaskCompletionSource<IEnumerable<IosFile>> filesTcs = new();
+        TaskCompletionSource<IEnumerable<IosFile>?> filesTcs = new();
+
+        picker.WasCancelled += (_, e) =>
+        {
+            filesTcs.TrySetResult(null);
+        };
+
         picker.DidPickDocumentAtUrls += (_, e) =>
         {
             filesTcs.TrySetResult(e.Urls
