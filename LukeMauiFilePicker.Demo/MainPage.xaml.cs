@@ -67,11 +67,13 @@ public partial class MainPage : ContentPage
         var bytes = Encoding.UTF8.GetBytes(TextEditor.Text ?? "");
         using var memory = new MemoryStream(bytes);
 
-        await picker.SaveFileAsync(new("text.txt", memory)
+        var result = await picker.SaveFileAsync(new("text.txt", memory)
         {
             AndroidMimeType = "text/plain",
             WindowsFileTypes = ("Text files", new() { ".txt", })
         });
+
+        await DisplayAlert("File Saved", result ? "File saved successfully." : "File save cancelled.", "OK");
     }
 
 }

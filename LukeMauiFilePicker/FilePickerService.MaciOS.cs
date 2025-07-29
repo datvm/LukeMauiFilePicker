@@ -69,6 +69,12 @@ partial class FilePickerService
 
         var picker = new UIDocumentPickerViewController(new[] { url });
         TaskCompletionSource<bool> filesTcs = new();
+
+        picker.WasCancelled += (_, e) =>
+        {
+            filesTcs.TrySetResult(false);
+        };
+
         picker.DidPickDocumentAtUrls += (_, e) =>
         {
             filesTcs.TrySetResult(e.Urls.Length > 0);
