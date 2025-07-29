@@ -10,6 +10,7 @@
         <Editor x:Name="TextEditor" HeightRequest="200" Margin="10" />
 
         <Button Text="Save" Clicked="Save" Margin="10" />
+        <Button Text="Deferred Save" Clicked="DeferredSave" Margin="10" />
     </VerticalStackLayout>
 
 </ContentPage>

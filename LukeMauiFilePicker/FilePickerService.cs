@@ -5,6 +5,7 @@ public interface IFilePickerService
     Task<IPickFile?> PickFileAsync(string title, Dictionary<DevicePlatform, IEnumerable<string>>? types);
     Task<IEnumerable<IPickFile>?> PickFilesAsync(string title, Dictionary<DevicePlatform, IEnumerable<string>>? types, bool multiple);
     Task<bool> SaveFileAsync(SaveFileOptions options);
+    Task<bool> SaveFileAsync(DeferredSaveFileOptions options);
 }
 
 
@@ -20,6 +21,7 @@ public partial class FilePickerService : IFilePickerService
     }
     public partial Task<IEnumerable<IPickFile>?> PickFilesAsync(string title, Dictionary<DevicePlatform, IEnumerable<string>>? types, bool multiple);
     public partial Task<bool> SaveFileAsync(SaveFileOptions options);
+    public partial Task<bool> SaveFileAsync(DeferredSaveFileOptions options);
 
     static async Task<IEnumerable<IPickFile>?> DefaultPickFilesAsync(string title, Dictionary<DevicePlatform, IEnumerable<string>>? types, bool multiple)
     {
@@ -51,15 +53,8 @@ public partial class FilePickerService : IFilePickerService
             .ToList();
     }
     
-    class DefaultPickFile : IPickFile
+    class DefaultPickFile(FileResult file) : IPickFile
     {
-
-        readonly FileResult file;
-        public DefaultPickFile(FileResult file)
-        {
-            this.file = file;
-        }
-
         public string FileName => file.FileName;
 
         public FileResult? FileResult => file;

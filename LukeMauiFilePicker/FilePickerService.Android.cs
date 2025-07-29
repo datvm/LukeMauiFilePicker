@@ -12,20 +12,37 @@ partial class FilePickerService
     public partial async Task<IEnumerable<IPickFile>?> PickFilesAsync(string title, Dictionary<DevicePlatform, IEnumerable<string>>? types, bool multiple)
         => await DefaultPickFilesAsync(title, types, multiple);
 
-    public partial async Task<bool> SaveFileAsync(SaveFileOptions options)
+    static async Task<Stream?> GetSaveStreamAsync(BaseSaveFileOptions o)
     {
         var activity = await Platform.WaitForActivityAsync();
         var uri = await CreateDocumentService.Instance
-            .RequestSaveFileAsync(options, activity);
-        if (uri is null) { return false; }
-                
+            .RequestSaveFileAsync(o, activity);
+        if (uri is null) { return null; }
+
         ArgumentNullException.ThrowIfNull(activity?.ContentResolver);
 
-        using var outStream = activity.ContentResolver.OpenOutputStream(uri);
+        var outStream = activity.ContentResolver.OpenOutputStream(uri);
         ArgumentNullException.ThrowIfNull(outStream);
 
-        await options.Content.CopyToAsync(outStream);
+        return outStream;
+    }
 
+    public partial async Task<bool> SaveFileAsync(SaveFileOptions options)
+    {
+        await using var outStream = await GetSaveStreamAsync(options);
+        if (outStream is null) { return false; }
+
+        await options.Content.CopyToAsync(outStream);
+        return true;
+    }
+
+    public partial async Task<bool> SaveFileAsync(DeferredSaveFileOptions options)
+    {
+        using var outStream = await GetSaveStreamAsync(options);
+        if (outStream is null) { return false; }
+
+        var content = await options.GetContentAsync();        
+        await content.CopyToAsync(outStream);
         return true;
     }
 

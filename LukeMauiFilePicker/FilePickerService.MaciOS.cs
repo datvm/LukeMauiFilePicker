@@ -1,4 +1,5 @@
 ﻿using Foundation;
+using ObjCRuntime;
 using UIKit;
 using UniformTypeIdentifiers;
 
@@ -58,16 +59,16 @@ partial class FilePickerService
         return await filesTcs.Task;
     }
 
-    public partial async Task<bool> SaveFileAsync(SaveFileOptions options)
+    static async Task<bool> SaveFileAsync(BaseSaveFileOptions options, Stream stream)
     {
         var path = Path.Combine(FileSystem.CacheDirectory, options.SuggestedFileName);
         using (var file = File.Create(path))
         {
-            await options.Content.CopyToAsync(file);
+            await stream.CopyToAsync(file);
         }
         var url = new NSUrl(path, false);
 
-        var picker = new UIDocumentPickerViewController(new[] { url });
+        var picker = new UIDocumentPickerViewController([url]);
         TaskCompletionSource<bool> filesTcs = new();
 
         picker.WasCancelled += (_, e) =>
@@ -85,6 +86,17 @@ partial class FilePickerService
         await controller.PresentViewControllerAsync(picker, true);
 
         return await filesTcs.Task;
+    }
+
+    public partial async Task<bool> SaveFileAsync(SaveFileOptions options)
+    {
+        return await SaveFileAsync(options, options.Content);
+    }
+
+    public partial async Task<bool> SaveFileAsync(DeferredSaveFileOptions options)
+    {
+        await using var stream = await options.GetContentAsync();
+        return await SaveFileAsync(options, stream);
     }
 
     class IosFile : IPickFile

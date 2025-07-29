@@ -5,22 +5,37 @@ namespace LukeMauiFilePicker;
 
 partial class FilePickerService
 {
-    
+
     public partial async Task<IEnumerable<IPickFile>?> PickFilesAsync(string title, Dictionary<DevicePlatform, IEnumerable<string>>? types, bool multiple)
         => await DefaultPickFilesAsync(title, types, multiple);
 
-    public partial async Task<bool> SaveFileAsync(SaveFileOptions options)
+    static async Task<StorageFile?> GetSaveStorageFileAsync(BaseSaveFileOptions options)
     {
         var picker = CreatePicker();
-        if (picker is null) { return false; }
+        if (picker is null) { return null; }
 
         picker.FileTypeChoices.Add(options.WindowsFileTypes.FileTypeName, options.WindowsFileTypes.FileTypeExts);
         picker.SuggestedFileName = options.SuggestedFileName;
 
         var file = await picker.PickSaveFileAsync();
+        return file;
+    }
+
+    public partial async Task<bool> SaveFileAsync(SaveFileOptions options)
+    {
+        var file = await GetSaveStorageFileAsync(options);
         if (file is null) { return false; }
 
         return await WriteToFileAsync(file, options.Content);
+    }
+
+    public partial async Task<bool> SaveFileAsync(DeferredSaveFileOptions options)
+    {
+        var file = await GetSaveStorageFileAsync(options);
+        if (file is null) { return false; }
+
+        await using var content = await options.GetContentAsync();
+        return await WriteToFileAsync(file, content);
     }
 
     static async Task<bool> WriteToFileAsync(IStorageFile file, Stream content)

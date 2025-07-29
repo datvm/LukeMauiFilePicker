@@ -15,7 +15,7 @@ internal class CreateDocumentService
 
     TaskCompletionSource<Uri?>? tcs;
 
-    public async Task<Uri?> RequestSaveFileAsync(SaveFileOptions o, Activity? activity)
+    public async Task<Uri?> RequestSaveFileAsync(BaseSaveFileOptions o, Activity? activity)
     {
         if (!RegisteredForActivityResult)
         {
@@ -50,7 +50,7 @@ internal class CreateDocumentService
         tcs = null;
     }
 
-    Intent GetIntent(SaveFileOptions o)
+    Intent GetIntent(BaseSaveFileOptions o)
     {
         var i = new Intent(Intent.ActionCreateDocument);
         i.AddCategory(Intent.CategoryOpenable);

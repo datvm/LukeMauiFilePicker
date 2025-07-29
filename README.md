@@ -8,6 +8,13 @@ This article uses Windows screenshots. To see screenshots for other platforms, s
 
 Was it helpful for you? Please consider a donation ❤️ [PayPal](https://paypal.me/datvm).
 
+# Change Log
+
+## v1.2.0
+
+- Fixed `SaveFileAsync` not returning when user cancels the save operation on iOS and Mac Catalyst.
+- Added `DeferredSaveFileOptions` to allow deferring the content creation until after the user picks a file. Only work for Windows and Android. See documentation for more details.
+
 # Installation & Setup
 
 ## Nuget Package
@@ -106,22 +113,23 @@ The `IPickFile` interface lets you know the `FileName` and openning a `Stream` t
 
 ```cs
 Task<bool> SaveFileAsync(SaveFileOptions options);
+Task<bool> SaveFileAsync(DeferredSaveFileOptions options);
 ```
 
-Save a file. The `SaveFileOptions` contains the following properties:
+Save a file. The `SaveFileOptions` and `DeferredSaveFileOptions` contains the following properties:
 
 - `string SuggestedFileName` (**Required**): The suggested file name.
-
-- `Stream Content` (**Required**): The content to write to. Note that this is required before user even pick a file because for iOS and Mac, it needs to be available before user picks a file.
-
+- `Stream Content` for `SaveFileOptions` (**Required**): The content to write to. Note that this is required before user even pick a file because for iOS and Mac, it needs to be available before user picks a file.
+- `Func<Stream>` or `Func<Task<Stream>> Content` for `DeferredSaveFileOptions`: A function that returns a stream to write to. This is useful when you want to defer the content creation until after the user picks a file. The function is not called if user cancels the save operation. **Note:** on iOS and Mac Catalyst, this function simply redirects to `SaveFileOptions.Content` since the content needs to be available before user picks a file.
 - `(string FileTypeName, List<string> FileTypeExts) WindowsFileTypes`: Windows-specific file types. The `FileTypeName` is the name of the file type (can be any descriptive text), and `FileTypeExts` is a list of file extensions. If you do not specify this, the default is `All Files (*.*)`.
 
 - `string AndroidMimeType`: Android-specific MIME type. If you do not specify this, the default is `application/octet-stream`.
 
 The method returns `bool` to indicate if the user successfully picked a file and saved the content.
 
-> **Note**  
-> There is no specific iOS and Mac Catalyst option but this feature works for them.
+> **NOTE**  
+> There is no specific iOS and Mac Catalyst option.  
+> `DeferredSaveFileOptions` acts just like `SaveFileOptions` on iOS and Mac Catalyst since the content needs to be available before user picks a file.
 
 ![Windows Save File Picker](./imgs/win-save.png)
 
@@ -143,58 +151,4 @@ await picker.SaveFileAsync(new("text.txt", memory)
 
 # Screenshots on all platforms
 
-## App UI
-
-![Windows App](./imgs/win-app.png)
-Windows App
-
-![Android App](./imgs/and-ui.png)
-Android App
-
-![iOS App](./imgs/ios-ui.png)
-iOS App
-
-![Mac Catalyst App](./imgs/mac-ui.png)
-Mac Catalyst App
-
-## Open File Picker - Single File
-
-![Windows Open File Picker](./imgs/win-pick-single.png)
-Windows Open Single File Picker
-
-![Android Open File Picker](./imgs/and-pick-single.png)
-Android Open Single File Picker
-
-![iOS Open File Picker](./imgs/ios-pick-single.png)
-iOS Open Single File Picker
-
-![Mac Catalyst Open File Picker](./imgs/mac-pick-single.png)
-Mac Catalyst Open Single File Picker
-
-## Open File Picker - Multiple Files
-
-![Windows Open File Picker](./imgs/win-pick-multi.png)
-Windows Open Multiple Files Picker
-
-![Android Open File Picker](./imgs/and-pick-multi.png)
-Android Open Multiple Files Picker
-
-![iOS Open File Picker](./imgs/ios-pick-multi.png)
-iOS Open Multiple Files Picker
-
-![Mac Catalyst Open File Picker](./imgs/mac-pick-multi.png)
-Mac Catalyst Open Multiple Files Picker
-
-## Save File Picker
-
-![Windows Save File Picker](./imgs/win-save.png)
-Windows Save File Picker
-
-![Android Save File Picker](./imgs/and-save.png)
-Android Save File Picker
-
-![iOS Save File Picker](./imgs/ios-save.png)
-iOS Save File Picker
-
-![Mac Catalyst Save File Picker](./imgs/mac-save.png)
-Mac Catalyst Save File Picker
+See [the imgs folder](./imgs).

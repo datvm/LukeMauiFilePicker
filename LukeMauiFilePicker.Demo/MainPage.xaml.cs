@@ -62,19 +62,41 @@ public partial class MainPage : ContentPage
         await OnFilesPickedAsync(files);
     }
 
-    private async void Save(object sender, EventArgs e)
+    MemoryStream GetContentStream()
     {
         var bytes = Encoding.UTF8.GetBytes(TextEditor.Text ?? "");
-        using var memory = new MemoryStream(bytes);
+        return new MemoryStream(bytes);
+    }
 
-        var result = await picker.SaveFileAsync(new("text.txt", memory)
+    private async void Save(object sender, EventArgs e)
+    {
+        using var memory = GetContentStream();
+
+        var result = await picker.SaveFileAsync(new SaveFileOptions("text.txt", memory)
         {
             AndroidMimeType = "text/plain",
-            WindowsFileTypes = ("Text files", new() { ".txt", })
+            WindowsFileTypes = ("Text files", [".txt",])
         });
 
         await DisplayAlert("File Saved", result ? "File saved successfully." : "File save cancelled.", "OK");
     }
 
+    private async void DeferredSave(object sender, EventArgs e)
+    {
+        // Simulate generating content
+        async Task<Stream> streamFn()
+        {
+            await Task.Delay(2000);
+            return GetContentStream();
+        }
+
+        var result = await picker.SaveFileAsync(new DeferredSaveFileOptions("deferred.txt", streamFn)
+        {
+            AndroidMimeType = "text/plain",
+            WindowsFileTypes = ("Text files", [".txt",])
+        });
+
+        await DisplayAlert("File Saved", result ? "File saved successfully." : "File save cancelled.", "OK");
+    }
 }
 
