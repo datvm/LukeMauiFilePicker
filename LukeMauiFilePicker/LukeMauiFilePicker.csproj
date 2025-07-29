@@ -23,6 +23,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>android;windows;ios;picker;file picker;maui;winui;maccatalyst</PackageTags>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Version>1.1.1</Version>
 	</PropertyGroup>
 
 	<!-- Android -->

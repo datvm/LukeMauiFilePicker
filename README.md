@@ -1,4 +1,4 @@
-This project is an attempt to temporarily fix dotnet/maui#11088 . This project also provides pickers experience across almost all platforms: WinUI, Android, iOS and Mac Catalyst. So far from my test, **no permission is needed** since you only have access to specific files that user picks.
+This project is an attempt to temporarily fix dotnet/maui#11088 . This project also provides pickers experience across almost all platforms: WinUI, Android, iOS and Mac Catalyst. So far from my test, ~~**no permission is needed** since you only have access to specific files that user picks.~~ you only need to declare permission on MacOS, no other permission is needed on other platforms.
 
 See [demo project](./LukeMauiFilePicker.Demo/) with sample text editor app: **Opening a single file**, **Opening multiple files** (concatenate all the content) and **Saving into a file** (location and name picked by user).
 
@@ -38,6 +38,17 @@ builder.ConfigureFilePicker(100);
 
 > **Warning**  
 > If you do not call `ConfigureFilePicker()`, an `InvalidOperationException` will be thrown if you invoke Android Save Picker.
+
+## MacOS Permissions
+
+On MacOS, you need to declare the following permissions in your `Info.plist` file. Choose one of the following options based on your needs:
+
+```xml
+<key>com.apple.security.files.user-selected.read-write</key>
+<true/>
+<key>com.apple.security.files.user-selected.read-only</key>
+<true/>
+```
 
 # Usage
 
